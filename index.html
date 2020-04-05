@@ -1,1 +1,684 @@
-<h1>Testing testing 123!</h1>
+<!DOCTYPE html>
+<html> 
+    <head>
+        <title>Version: A0.5.4</title> 
+        <style>
+            body {
+                margin: 0;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="mycanvas"></canvas> 
+    </body>
+    <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+ 
+    <script>
+        var sketchProc = function(processingInstance) {
+            with (processingInstance) {
+                if ("variables and settings") {
+                    var sw = innerWidth; sh = innerHeight;
+                    size(sw, sh); 
+
+                    if ("image") {
+                        var snailstudiosimage = loadImage("http://24.33.68.137/RSS/art/snail studios logo.PNG");
+                        var backgroundimage = loadImage("http://24.33.68.137/RSS/art/background placeholder.png");
+                        var titlescreen = loadImage("http://24.33.68.137/RSS/art/title_screen.png");
+                        var playbutton = loadImage("http://24.33.68.137/RSS/art/play button.png");
+                        var optionsbutton = loadImage("http://24.33.68.137/RSS/art/settings button.png");
+                        var castle = loadImage("http://24.33.68.137/RSS/art/castle.png");
+                        var sunnyhut = loadImage("http://24.33.68.137/RSS/art/sunnyhut.png");
+                        var settings1 = loadImage("http://24.33.68.137/RSS/art/settings screen.png");
+                        var settings2 = loadImage("http://24.33.68.137/RSS/art/settings screen2.png");
+                        var taco = loadImage("http://24.33.68.137/RSS/art/Taco_Guy.png");
+                        var rainbow = loadImage("http://24.33.68.137/RSS/art/rainbow.png");
+                        var sscpeek = loadImage("http://24.33.68.137/RSS/art/tacothoughts.png");
+                        var mainhud = loadImage("http://24.33.68.137/RSS/art/mainhud.png");
+
+                        var icon = [loadImage("http://24.33.68.137/RSS/art/normalicon.png"), loadImage("http://24.33.68.137/RSS/art/enemyicon.png"), loadImage("http://24.33.68.137/RSS/art/spbg.png"), loadImage("http://24.33.68.137/RSS/art/eks.png"), loadImage("http://24.33.68.137/RSS/art/royalknighticon.png"), loadImage("http://24.33.68.137/RSS/art/badroyalknighticon.png")];
+                        var unit = [loadImage("http://24.33.68.137/RSS/art/soldier.png"), loadImage("http://24.33.68.137/RSS/art/enemyknight.png"), loadImage("http://24.33.68.137/RSS/art/spnk.png"), loadImage("http://24.33.68.137/RSS/art/spek.png"), loadImage("http://24.33.68.137/RSS/art/royalknight.png"), loadImage("http://24.33.68.137/RSS/art/badroyalknight.png")];
+                    }
+                    
+                    if ("normal variables") {
+                        var unitX = [100]; unitY = [100]; unitSelect = []; unitsize = [313, 417]; unitspeed = 5; playerspeed = 5;
+                        var destinationX = []; destinationY = [];
+                        var xadd = 0; yadd = 0; direction = "horizontal"; maxX = 0; maxY = 0; unitselectednum = 0;
+                        var easteregg = false; eggtimer = 200; introtexttime = 500;
+
+                        var mousedrag = 0; mousedragcoord = []; //x, y, w, h
+
+                        var x = 0; y = 0;
+
+                        //v 0.2.2
+                        var movement = [false, false, false, false];
+
+                        //v 0.2.3
+                        var page = "intro";
+                        var menuintro = 0;
+                        var menuoutro = 200;
+
+                        //v 0.2.4
+                        var audiotoggle = true;
+
+                        //v 0.2.6.2
+                        var sfxplayed = [false, false];
+
+                        //v 0.2.7
+                        var unittype = [0];
+
+                        //v 0.3
+                        var version = document.title;
+                        var battlemusic = false;
+                        var battletime = 0;
+
+                        //v 0.3.0.2
+                        var code = "";
+                        var aa = 1664525,
+                        ac = 1013904223,
+                        am = Math.pow(2, 32),
+                        aseed = 1;
+                    }
+
+                    //v a0.3.1
+                    var selectedunits = 0;
+                    var unitpanelgraphic = function(x, y, w, h, ID) {
+
+                        //background panel
+                        image(icon[unittype[ID]], x, y, w, h);
+                        
+                        //health bar!
+                        strokeWeight(1);
+                        fill(100, 0, 0);
+                        rect(x + sw/200, y + sh/100, w - sw/100, h/10);
+                        fill(255, 0, 0);
+                        rect(x + sw/200, y + sh/100, (w - sw/100)*(unithealth[ID]/unitmaxhealth[round((unittype[ID]-1)/2)]), h/10);
+
+                        //health text
+                        fill(0);
+                        textAlign(CENTER, CENTER);
+                        if (h > 100) {
+                            textSize(14);
+                        } 
+                        if (h < 100 && h > 10) {
+                            textSize(10);
+                        }
+                        
+                        text(unithealth[ID] + "/" + unitmaxhealth[round((unittype[ID]-1)/2)], x + sw/200 + (w - sw/100)/2, y + sh/100 + h/20);
+                    }
+                    var IDredirect = [];
+                    var unithealth = [10];
+                    var ocatwords = "";
+                
+                    //v a0.4
+                    var attacked = [];
+                    var attackcooldown = [];
+
+                    //v a0.5
+                    var kp = "";
+
+                    //v a0.5.2
+                    var mpd = false;
+
+                    //v a0.5.3
+                    var unitmaxhealth = [10, 50, 20];
+                }
+
+                keyPressed = function() {
+                    if (page === "game") {
+                        kp = key.toString();
+                        code+=kp;
+                        if (Number(kp) > 0 && Number(kp) < 7) {
+                            unitX[unitX.length] = mouseX + x;
+                            unitY[unitY.length] = mouseY + y;
+                            unittype[unittype.length] = Number(kp) - 1;
+                            unithealth[unithealth.length] = unitmaxhealth[round((Number(kp)-2)/2)];
+                        }
+                        
+                        if (kp === "w" || keyCode + 0 === 38) {
+                            movement[0] = true;
+                            if (movement[2] === true) {
+                                movement[0] = false;
+                                movement[2] = false;
+                            }
+                        }
+                        if (kp === "a" || keyCode + 0 === 37) {
+                            movement[1] = true;
+                            if (movement[3] === true) {
+                                movement[1] = false;
+                                movement[3] = false;
+                            }
+                        }
+                        if (kp === "s" || keyCode + 0 === 40) {
+                            movement[2] = true;
+                            if (movement[0] === true) {
+                                movement[0] = false;
+                                movement[2] = false;
+                            }
+                        }
+                        if (kp === "d" || keyCode + 0 === 39) {
+                            movement[3] = true;
+                            if (movement[1] === true) {
+                                movement[3] = false;
+                                movement[1] = false;
+                            }
+                        }
+                    }
+                }
+                keyReleased = function() {
+                    if (page === "game") {
+                        if (movement[0] === true&&movement[1] === false&&movement[2] === false&&movement[3] === false) {
+                            movement[0] = false;
+                        }
+                        if (movement[0] === false&&movement[1] === true&&movement[2] === false&&movement[3] === false) {
+                            movement[1] = false;
+                        }
+                        if (movement[0] === false&&movement[1] === false&&movement[2] === true&&movement[3] === false) {
+                            movement[2] = false;
+                        }
+                        if (movement[0] === false&&movement[1] === false&&movement[2] === false&&movement[3] === true) {
+                            movement[3] = false;
+                        }
+                        if (movement[0] === true&&movement[1] === true&&movement[2] === false&&movement[3] === false) {
+                            if (key.toString() === 'w' || keyCode + 0 === 38) {
+                                movement[0] = false;
+                            }
+                            if (key.toString() === 'a' || keyCode + 0 === 37) {
+                                movement[1] = false;
+                            }
+                        }
+                        if (movement[0] === false&&movement[1] === true&&movement[2] === true&&movement[3] === false) {
+                            if (key.toString() === 'a' || keyCode + 0 === 37) {
+                                movement[1] = false;
+                            }
+                            if (key.toString() === 's' || keyCode + 0 === 40) {
+                                movement[2] = false;
+                            }
+                        }
+                        if (movement[0] === false&&movement[1] === false&&movement[2] === true&&movement[3] === true) {
+                            if (key.toString() === 's' || keyCode + 0 === 40) {
+                                movement[2] = false;
+                            }
+                            if (key.toString() === 'd' || keyCode + 0 === 39) {
+                                movement[3] = false;
+                            }
+                        }
+                        if (movement[0] === true&&movement[1] === false&&movement[2] === false&&movement[3] === true) {
+                            if (key.toString() === 'd' || keyCode + 0 === 39) {
+                                movement[3] = false;
+                            }
+                            if (key.toString() === 'w' || keyCode + 0 === 38) {
+                                movement[0] = false;
+                            }
+                        }
+                    }
+                }
+
+                mousePressed = function() {
+                    mpd = true;
+                    if (page === "options") {
+                        if (mouseX > innerWidth/2 - innerWidth/4 - innerWidth/20 && mouseY > innerHeight/2 - innerHeight/20 && mouseX < innerWidth/2 - innerWidth/4 + innerWidth/20 && mouseY < innerHeight/2 + innerHeight/20) {
+                            page = "menu";
+                            audiotoggle = true;
+                        }
+                        if (mouseX > innerWidth/2 + innerWidth/4 - innerWidth/20 && mouseY > innerHeight/2 - innerHeight/20 && mouseX < innerWidth/2 + innerWidth/4 + innerWidth/20 && mouseY < innerHeight/2 + innerHeight/20) {
+                            page = "menu";
+                            audiotoggle = false;
+                        }
+                    }
+                    if (page === "menu") {
+                        sfx2.volume = 0.5;
+                        if (mouseX > sw/12 && mouseY > sh/4.6 && mouseX < sw/12 + sw/6 && mouseY < sh/4.6 + sh/7) {
+                            page = "game";
+                            if (audiotoggle === true) {
+                                sfx2.play();
+                            }
+                            for (var nmbgen = 0; nmbgen < 1000; nmbgen++) {
+                                aseed = round((aa * aseed + ac) % am);
+                            }
+                        }
+                        if (mouseX > sw/12 && mouseY > sh/1.9 && mouseX < sw/12 + sw/6 && mouseY < sh/1.9 + sh/7) {
+                            page = "options";
+                            if (audiotoggle === true) {
+                                sfx2.play();
+                            }
+                        }
+                    }
+                    if (page === "intro" && menuintro > 1) {
+                        page = "menu";
+                    }
+                    if (page === "game") {
+                        if (mouseButton === LEFT) {
+                            mousedrag = true;
+                            mousedragcoord[0] = mouseX + x; //left side
+                            mousedragcoord[1] = mouseY + y; //top side
+                        }
+
+                        if (mouseButton === RIGHT) {
+                            xadd = 0;
+                            yadd = 0;
+                            maxX = 0;
+                            maxY = 0;
+                            unitselectednum = 0;
+                            direction = "horizontal";
+                            for (var destinationset = 0; destinationset < unitX.length + 1; destinationset++) {
+                                if (unitSelect[destinationset] === true) {
+                                    unitselectednum++;
+                                    
+                                    destinationX[destinationset] = mouseX + x + xadd*unitsize[0]/4;
+                                    destinationY[destinationset] = mouseY + y + yadd*unitsize[1]/5;
+                                    
+                                    if (direction === "horizontal") {
+                                        if (xadd >= maxX) {
+                                            direction = "verticle";
+                                            yadd = 0; xadd++; maxX++;
+                                        } else {
+                                            xadd++;
+                                        }
+                                    } else  {
+                                        if (yadd >= maxY) {
+                                            direction = "horizontal";
+                                            xadd = 0; yadd++; maxY++;
+                                        } else {
+                                            yadd++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else if (page === "debug") {
+                        aseed++;
+                    }
+                }
+                mouseReleased = function() {
+                    mpd = false;
+                    if (mousedrag === true) {
+                        mousedrag = false;
+
+                        mousedragcoord[2] = mouseX + x; //right side
+                        mousedragcoord[3] = mouseY + y; //bottom side
+
+
+                        //process to fix bug where sides are reversed.
+                        if (mousedragcoord[0] > mousedragcoord[2]) {
+                            mousedragcoord[2] = mousedragcoord[0];
+                            mousedragcoord[0] = mouseX + x;
+                        }
+                        if (mousedragcoord[1] > mousedragcoord[3]) {
+                            mousedragcoord[3] = mousedragcoord[1];
+                            mousedragcoord[1] = mouseY + y;
+                        }
+
+
+                        if (mouseX + x < mousedragcoord[0]) {
+                            mousedragcoord[0] = mouseX + x;
+                        }
+                        if (mouseY + y < mousedragcoord[1]) {
+                            mousedragcoord[1] = mouseY + y;
+                        }
+
+                        unitSelect = [];
+
+                        for (var selectdetect = 0; selectdetect < unitX.length + 1; selectdetect++) {
+                            if (unitX[selectdetect] + unitsize[0]/8 > mousedragcoord[0] && unitY[selectdetect] + unitsize[1]/4 > mousedragcoord[1] && unitX[selectdetect] - unitsize[0]/8 < mousedragcoord[2] && unitY[selectdetect] - unitsize[1]/4 < mousedragcoord[3]) {
+                                unitSelect[selectdetect] = true;
+                            }
+                        }
+                    }
+                }
+
+                draw = function() {
+                    //music!
+                    if (page === "options") {
+                        //darkness!
+                        background(0);
+                        textAlign(CENTER, CENTER);
+                        noStroke();
+
+                        //glowy effect
+                        for (var glowy = 0; glowy < 100; glowy++) {
+                            fill(255, 255, 255, 1);
+                            ellipse(mouseX, mouseY, glowy*20, glowy*20);
+                        }
+                    
+                        //buttons!
+                        if (mouseX > innerWidth/2 - innerWidth/4 - innerWidth/20 && mouseY > innerHeight/2 - innerHeight/20 && mouseX < innerWidth/2 - innerWidth/4 + innerWidth/20 && mouseY < innerHeight/2 + innerHeight/20) {
+                            fill(100);
+                        } else {
+                            fill(50);
+                        }
+                        rect(innerWidth/2 - innerWidth/4 - innerWidth/20, innerHeight/2 - innerHeight/20, innerWidth/10, innerHeight/10);
+
+                        if (mouseX > innerWidth/2 + innerWidth/4 - innerWidth/20 && mouseY > innerHeight/2 - innerHeight/20 && mouseX < innerWidth/2 + innerWidth/4 + innerWidth/20 && mouseY < innerHeight/2 + innerHeight/20) {
+                            fill(100);
+                        } else {
+                            fill(50);
+                        }
+                        rect(innerWidth/2 + innerWidth/4 - innerWidth/20, innerHeight/2 - innerHeight/20, innerWidth/10, innerHeight/10);
+
+                        fill(255);
+                        textSize(50);
+                        text("Yes", innerWidth/2 - innerWidth/4, innerHeight/2);
+                        text("No", innerWidth/2 + innerWidth/4, innerHeight/2);
+
+                        textSize(100);
+                        text("Do you want audio?", innerWidth/2, innerHeight/4);
+                    }
+                    if (page === "intro") {
+                        if (audiotoggle === true) {
+                            audio.volume = 0.5;
+                            audio.play();
+                        }
+
+                        background(0);
+                        if (menuintro < snailstudiosimage.height/1.5) {
+                            menuintro++;
+                        } else {
+                            page = "menu";
+                        }
+                        image(snailstudiosimage, sw/2 - snailstudiosimage.width/4 - menuintro/2, sh/2 - snailstudiosimage.height/4 - menuintro/2, snailstudiosimage.width/2 + menuintro, snailstudiosimage.height/2 + menuintro);
+                        fill(0, 0, 0, -150 + menuintro/(snailstudiosimage.height/1.5)*405);
+                        rect(0, 0, innerWidth, innerHeight);
+                    }
+                    if (page === "menu") {
+                        image(titlescreen, 0, 0, innerWidth, innerHeight);
+                        sfx1.volume = 0.7;
+
+                        if (mouseX > sw/12 && mouseY > sh/4.6 && mouseX < sw/12 + sw/6 && mouseY < sh/4.6 + sh/7) {
+                            image(playbutton, sw/12 - sw/50, sh/4.6 - sh/70, sw/5, sh/6);
+                            
+                            if (sfxplayed[0] === false && audiotoggle === true) {
+                                sfx1.play();
+                                sfxplayed[0] = true;
+                            }
+                        } else {
+                            image(playbutton, sw/12, sh/4.6, sw/6, sh/7);
+                            sfxplayed[0] = false;
+                        }
+                        if (mouseX > sw/12 && mouseY > sh/1.9 && mouseX < sw/12 + sw/6 && mouseY < sh/1.9 + sh/7) {
+                            image(optionsbutton, sw/12 - sw/70, sh/1.9 - sh/70, sw/5, sh/6);
+
+                            if (sfxplayed[1] === false && audiotoggle === true) {
+                                sfx1.play();
+                                sfxplayed[1] = true;
+                            }
+                        } else {
+                            image(optionsbutton, sw/12, sh/1.9, sw/5.8, sh/7);
+                            sfxplayed[1] = false;
+                        }
+                    }
+                    if (page === "game") {
+                        if ("main settings") {
+                            //audio stuff
+                            audio.volume = 0.5;
+                            audio2.volume = 0.5;
+                            if (audiotoggle === true) {
+                                if (battlemusic === true) {
+                                    audio2.play();
+                                    audio.pause();
+                                    if (battletime < 600) {
+                                        battletime++;
+                                    } else {
+                                        battlemusic = false;
+                                    }
+                                } else {
+                                    audio.play();
+                                    audio2.pause();
+                                }
+                            }
+                        
+                            //movement logic
+                            if ("movement") {
+                                if (movement[0] === true) {
+                                    y-=playerspeed;
+                                }
+                                if (movement[1] === true) {
+                                    x-=playerspeed;
+                                }
+                                if (movement[2] === true) {
+                                    y+=playerspeed;
+                                }
+                                if (movement[3] === true) {
+                                    x+=playerspeed;
+                                }
+                            }
+                        
+                            //background
+                            background(100);
+
+                            //general settings
+                            stroke(50);
+                            strokeWeight(10);
+                            textAlign(CENTER, CENTER);
+                            textSize((sw+sh)/100);
+                        }
+
+                        if ("map") {
+                            //map
+                            image(backgroundimage, -x, -y, innerWidth, innerHeight);
+                            image(castle, innerWidth - x, -y, innerWidth, innerHeight);
+                            image(sunnyhut, -innerWidth/2 - x, -y, innerWidth/2, innerHeight);
+                            text(aseed, sw*10 - x, 0 - y);
+                        }
+
+                        //version!
+                        if (introtexttime > 0) {
+                            introtexttime--;
+                            fill(0, 0, 0, introtexttime);
+                            text("Last Major: Try pressing 3 and 4 to get the NEW knights! Optimizations done as well.\nLast Minor: Changed menu layout!", innerWidth/2, innerHeight/4);
+                            textSize((sw+sh)/25);
+                            text(version + ":\n\n", innerWidth/2, innerHeight/4);
+                        }
+
+                        //drawing the units!
+                        for (var drawunit = 0; drawunit < unitX.length; drawunit++) {
+                            //movement
+                            if (destinationX[drawunit] > 0 || destinationX[drawunit] < 0) {
+                                unitX[drawunit]+=unitspeed*(destinationX[drawunit] - unitX[drawunit])/(abs(destinationX[drawunit] - unitX[drawunit]) + abs(destinationY[drawunit] - unitY[drawunit]));
+                                unitY[drawunit]+=unitspeed*(destinationY[drawunit] - unitY[drawunit])/(abs(destinationX[drawunit] - unitX[drawunit]) + abs(destinationY[drawunit] - unitY[drawunit]));
+                            }
+                            if (abs(unitX[drawunit] - destinationX[drawunit]) < unitspeed && abs(unitY[drawunit] - destinationY[drawunit]) < unitspeed) {
+                                destinationX[drawunit] = "";
+                                destinationY[drawunit] = "";
+                            }
+
+                            //unit draw
+                            if (unitSelect[drawunit] === true) {
+                                fill(0, 255, 255, 100);
+                            } else {
+                                fill(0, 0, 0, 0);
+                            }
+                                
+                            //selection thing
+                            noStroke();
+                            rect(unitX[drawunit] - x - unitsize[0]/8, unitY[drawunit] - y - unitsize[1]/4, unitsize[0]/4, unitsize[1]/2);
+
+                            image(unit[unittype[drawunit]], unitX[drawunit] - x - unitsize[0]/4, unitY[drawunit] - y - unitsize[1]/4, unitsize[0]/2, unitsize[1]/2);
+
+                            //destination flag
+                            if (destinationX[drawunit] > 0 || destinationX[drawunit] < 0) {
+                                fill(0);
+                                textSize((sw+sh)/100);
+                                text(drawunit, destinationX[drawunit] - x, destinationY[drawunit] - y);
+                            }
+                        
+                            //castle achievement!
+                            if (unitX[drawunit] > sw && unitY[drawunit] > 0 && unitX[drawunit] < sw*2 && unitY[drawunit] < sh) {
+                                easteregg = true;
+                            }
+                            
+                            //dying system!
+                            for (var collision = 0; collision < unitX.length; collision++) {
+                                if (unitX[drawunit] + unitsize[0]/4 > unitX[collision] && unitY[drawunit] + unitsize[1]/4 > unitY[collision] && unitX[drawunit] - unitsize[0]/4 < unitX[collision] && unitY[drawunit] - unitsize[1]/4 < unitY[collision] && unittype[drawunit]%2 != unittype[collision]%2) {
+                                    if (attacked[drawunit] != true) {
+                                        unithealth[collision]--;
+                                        attacked[drawunit] = true;
+                                        attackcooldown[drawunit] = 50;
+                                    }
+                                    if (unithealth[drawunit] < 2) {
+                                        unitX.splice(drawunit, 1);
+                                        unitY.splice(drawunit, 1);
+                                        unittype.splice(drawunit, 1);
+                                        destinationX.splice(drawunit, 1);
+                                        destinationY.splice(drawunit, 1);
+                                        unitSelect.splice(drawunit, 1);
+                                        unithealth.splice(drawunit, 1);
+                                    }
+
+                                    battlemusic = true;
+                                    battletime = 0;
+
+                                    if (attackcooldown[drawunit] > 0) {
+                                        attackcooldown[drawunit]--;
+                                    } else {
+                                        attacked[drawunit] = false;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        //healthbars
+                        for (var healthbars = 0; healthbars < unitX.length; healthbars++) {
+                            strokeWeight(1);
+                            if (unittype[healthbars]%2 === 0) {
+                                fill(100, 0, 0);
+                                rect(unitX[healthbars] - x - unitsize[0]/12, unitY[healthbars] - y - unitsize[1]/6, unitsize[0]/8, unitsize[1]/100);
+                                fill(255, 0, 0);
+                                rect(unitX[healthbars] - x - unitsize[0]/12, unitY[healthbars] - y - unitsize[1]/6, unitsize[0]/8*(unithealth[healthbars]/unitmaxhealth[round((unittype[healthbars]-1)/2)]), unitsize[1]/100);
+                            }
+                            if (unittype[healthbars]%2 === 1) {
+                                fill(100, 0, 0);
+                                rect(unitX[healthbars] - x - unitsize[0]/25, unitY[healthbars] - y - unitsize[1]/6, unitsize[0]/8, unitsize[1]/100);
+                                fill(255, 0, 0);
+                                rect(unitX[healthbars] - x - unitsize[0]/25, unitY[healthbars] - y - unitsize[1]/6, unitsize[0]/8*(unithealth[healthbars]/unitmaxhealth[round((unittype[healthbars]-1)/2)]), unitsize[1]/100);
+                            }
+                        }
+
+                        //extra settings hardly messed with
+                        if ("special") {
+                            //selection box.
+                            if (mousedrag === true) {
+                                strokeWeight(1);
+                                fill(0, 255, 255, 50);
+                                rect(mousedragcoord[0] - x, mousedragcoord[1] - y, mouseX - mousedragcoord[0] + x, mouseY - mousedragcoord[1] + y);
+                            }
+                        
+                            //more of an achievement, really
+                            if (easteregg === true && eggtimer > 0) {
+                                strokeWeight(10);
+                                fill(75);
+                                rect(sw/2 - sw/5, 0, sw/2.5, sh/10, 50);
+                                
+                                fill(0);
+                                text('Achievement earned!\n"Visit a castle!"', sw/2, sh/20);
+
+                                image(castle, sw/2 - sw/7.5, sh/100, sw/20 - sw/100, sh/10 - sh/50);
+                                eggtimer--;
+                            }
+
+                            //ocat
+                            if ("debugging") {
+                                if (Number(code) === aseed) {
+                                    aseed = 0;
+                                    page = "debug";
+                                    ocatwords = ["You've unlocked the taco!", "Now you see, this is all there is to the easteregg.", "There's NO secrets within secrets.", "We here at Rolling Snail Studios head quarters don't do META things.", "You won't find anything!", "Nothing at all.", "Just empty void and messages galore!", "Oh for god's sake...", "Fine, here, take a rainbow-y background!", "Does that satisfy your easteregg-finding desires?", "No?", "Well, take a direct look at the super secret channel then!", "It would appear I am on my own in creating this easter egg...", "So, I shall take inspiration from my old button games and\nput what could never be accepted as a whole game in this secret!", "Enjoy!", "Right, so, you're looking for a secret within a secret.", "Which, I shall claim, does not exist.", "Yet, you persist onwards!", "What do you want from me? A medal?", "Goodness, the artists are working hard enough on the main game!", "Can't you be happy with a taco?", "Surely there's no need for you to continue...", "This is madness I tell you!", "Pure and utter madness!"];
+                                }
+                            }
+                        }
+                    
+                        //HUD
+                        if ("HUD") {
+                            //main art settings
+                            fill(100, 50, 25, 250);
+                            strokeWeight(round((sw+sh)/600));
+                            stroke(0);
+
+                            //main panel
+                            image(mainhud, -3, sh/1.25 + 3, sw + 3, sh/5);
+
+                            selectedunits = 0;
+                            for (var selectpanel = 0; selectpanel < unitX.length; selectpanel++) {
+                                if (unitSelect[selectpanel] === true) {
+                                    IDredirect[selectedunits] = selectpanel;
+                                    selectedunits++;
+                                }
+                            }
+                            if (selectedunits != 0) {
+                                //unit panel (light)
+                                rect(sw/4, sh/1.25 + sh/100, sw/2, sh/5.5);
+                            } else {
+                                //unit panel (dark)
+                                fill(50, 25, 25);
+                                rect(sw/4, sh/1.25 + sh/100, sw/2, sh/5.5);
+
+                                //text
+                                fill(0);
+                                textSize((sw+sh)/40);
+                                text("NO UNITS SELECTED", innerWidth/2, innerHeight/1.1);
+                            }
+
+                            //for (var selectedrow = 0; selectedrow < 5; selectedrow++) {
+                                //if (selectedunits > selectedrow) {
+                                    //making a loop to show selected units better.
+                                //}
+                            //}
+
+                            if (selectedunits < 11) {
+                                for (var unitpanel = 0; unitpanel < selectedunits; unitpanel++) {
+                                    unitpanelgraphic(sw/4 + sw/20.2*unitpanel + sw/200, sh/1.25 + sh/50, sw/22.5, sh/6.2, IDredirect[unitpanel]);
+                                }
+                            }
+                            if (selectedunits > 10 && selectedunits < 21) {
+                                for (var unitpanel2 = 0; unitpanel2 < selectedunits; unitpanel2++) {
+                                    if (unitpanel2 < 10) {
+                                        unitpanelgraphic(sw/4 + sw/20.2*unitpanel2 + sw/200, sh/1.25 + sh/50, sw/22.5, sh/13, IDredirect[unitpanel2]);
+                                    }
+                                    if (unitpanel2 > 9) {
+                                        unitpanelgraphic(sw/4 + sw/20.2*(unitpanel2-10) + sw/200, sh/1.25 + sh/50 + sh/11.8, sw/22.5, sh/13, IDredirect[unitpanel2]);
+                                    }
+                                }
+                            }
+                        }
+                    
+                    } else if (page === "debug") {
+                        if (aseed < 8) {
+                            background(0);
+                        } else {
+                            code++;
+                            image(rainbow, 0, -sh + code%sh, sw, sh);
+                            image(rainbow, 0, 0 + code%sh, sw, sh);
+                        }
+
+                        if (aseed === 11) {
+                            image(sscpeek, innerWidth/1.5, innerHeight/1.5, innerWidth/4, innerHeight/4);
+                        }
+                        textSize(30);
+                        textAlign(CENTER, CENTER);
+                        if (mpd === false) {
+                            image(taco, mouseX - 100, mouseY - 75, 200, 150);
+                        } else {
+                            image(taco, mouseX - 95, mouseY - 70, 190, 140);
+                        }
+                        if (aseed < 8) {
+                            fill(255);
+                        } else {
+                            fill(0);
+                        }
+                        text(ocatwords[aseed], mouseX, mouseY - 100);
+                    }
+                }
+            }
+        };
+        var canvas = document.getElementById("mycanvas"); 
+        var processingInstance = new Processing(canvas, sketchProc); 
+    </script>
+
+    <script>
+        var audio3 = new Audio("http://24.33.68.137/RSS/music/Retro-Night.mp3");
+        var audio2 = new Audio("http://24.33.68.137/RSS/music/Dark-winters-night.mp3");
+        var audio = new Audio("http://24.33.68.137/RSS/music/Tokyo-bells.mp3");
+
+        var sfx1 = new Audio("http://24.33.68.137/RSS/sounds/sfx1.mp3");
+        var sfx2 = new Audio("http://24.33.68.137/RSS/sounds/sfx2.mp3");
+    </script>
+</html>
