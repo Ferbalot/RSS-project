@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html> 
     <head>
-        <title>Version: A0.5.4</title> 
+        <title>Version: A0.6</title> 
         <style>
             body {
                 margin: 0;
@@ -105,6 +105,16 @@
                         }
                         
                         text(unithealth[ID] + "/" + unitmaxhealth[round((unittype[ID]-1)/2)], x + sw/200 + (w - sw/100)/2, y + sh/100 + h/20);
+
+                        if (h > 100) {
+                            textSize(12);
+                        } 
+                        if (h < 100 && h > 10) {
+                            textSize(10);
+                        }
+
+                        fill(150, 150, 0);
+                        text(unitname[round((unittype[ID]-1)/2)], x + sw/200 + (w - sw/100)/2, y + sh/100 + h/5);
                     }
                     var IDredirect = [];
                     var unithealth = [10];
@@ -122,51 +132,71 @@
 
                     //v a0.5.3
                     var unitmaxhealth = [10, 50, 20];
+
+                    //v a0.6
+                    var paused = false;
+                    var unitname = ["Esquire", "Knight", "Royal Esquire"];
                 }
 
                 keyPressed = function() {
                     if (page === "game") {
                         kp = key.toString();
-                        code+=kp;
-                        if (Number(kp) > 0 && Number(kp) < 7) {
-                            unitX[unitX.length] = mouseX + x;
-                            unitY[unitY.length] = mouseY + y;
-                            unittype[unittype.length] = Number(kp) - 1;
-                            unithealth[unithealth.length] = unitmaxhealth[round((Number(kp)-2)/2)];
-                        }
-                        
-                        if (kp === "w" || keyCode + 0 === 38) {
-                            movement[0] = true;
-                            if (movement[2] === true) {
-                                movement[0] = false;
-                                movement[2] = false;
+                        if (paused === false) {
+                            code+=kp;
+                            if (Number(kp) > 0 && Number(kp) < 7) {
+                                unitX[unitX.length] = mouseX + x;
+                                unitY[unitY.length] = mouseY + y;
+                                unittype[unittype.length] = Number(kp) - 1;
+                                unithealth[unithealth.length] = unitmaxhealth[round((Number(kp)-2)/2)];
+                            }
+                            
+                            if (kp === "w" || keyCode + 0 === 38) {
+                                movement[0] = true;
+                                if (movement[2] === true) {
+                                    movement[0] = false;
+                                    movement[2] = false;
+                                }
+                            }
+                            if (kp === "a" || keyCode + 0 === 37) {
+                                movement[1] = true;
+                                if (movement[3] === true) {
+                                    movement[1] = false;
+                                    movement[3] = false;
+                                }
+                            }
+                            if (kp === "s" || keyCode + 0 === 40) {
+                                movement[2] = true;
+                                if (movement[0] === true) {
+                                    movement[0] = false;
+                                    movement[2] = false;
+                                }
+                            }
+                            if (kp === "d" || keyCode + 0 === 39) {
+                                movement[3] = true;
+                                if (movement[1] === true) {
+                                    movement[3] = false;
+                                    movement[1] = false;
+                                }
                             }
                         }
-                        if (kp === "a" || keyCode + 0 === 37) {
-                            movement[1] = true;
-                            if (movement[3] === true) {
-                                movement[1] = false;
-                                movement[3] = false;
+                        //escape
+                        if (kp === "p") {
+                            if (paused === true) {
+                                paused = false;
+                            } else {
+                                paused = true;
                             }
                         }
-                        if (kp === "s" || keyCode + 0 === 40) {
-                            movement[2] = true;
-                            if (movement[0] === true) {
-                                movement[0] = false;
-                                movement[2] = false;
-                            }
-                        }
-                        if (kp === "d" || keyCode + 0 === 39) {
-                            movement[3] = true;
-                            if (movement[1] === true) {
-                                movement[3] = false;
-                                movement[1] = false;
+                        if (paused === true) {
+                            if (key.toString() === "m") {
+                                page = "menu";
+                                paused = false;
                             }
                         }
                     }
                 }
                 keyReleased = function() {
-                    if (page === "game") {
+                    if (page === "game" && paused === false) {
                         if (movement[0] === true&&movement[1] === false&&movement[2] === false&&movement[3] === false) {
                             movement[0] = false;
                         }
@@ -247,7 +277,7 @@
                     if (page === "intro" && menuintro > 1) {
                         page = "menu";
                     }
-                    if (page === "game") {
+                    if (page === "game" && paused === false) {
                         if (mouseButton === LEFT) {
                             mousedrag = true;
                             mousedragcoord[0] = mouseX + x; //left side
@@ -292,7 +322,7 @@
                 }
                 mouseReleased = function() {
                     mpd = false;
-                    if (mousedrag === true) {
+                    if (mousedrag === true && paused === false) {
                         mousedrag = false;
 
                         mousedragcoord[2] = mouseX + x; //right side
@@ -465,7 +495,7 @@
                         if (introtexttime > 0) {
                             introtexttime--;
                             fill(0, 0, 0, introtexttime);
-                            text("Last Major: Try pressing 3 and 4 to get the NEW knights! Optimizations done as well.\nLast Minor: Changed menu layout!", innerWidth/2, innerHeight/4);
+                            text("Last Major: Added a pause menu and unit names to selection tiles!", innerWidth/2, innerHeight/4);
                             textSize((sw+sh)/25);
                             text(version + ":\n\n", innerWidth/2, innerHeight/4);
                         }
@@ -473,7 +503,7 @@
                         //drawing the units!
                         for (var drawunit = 0; drawunit < unitX.length; drawunit++) {
                             //movement
-                            if (destinationX[drawunit] > 0 || destinationX[drawunit] < 0) {
+                            if ((destinationX[drawunit] > 0 || destinationX[drawunit] < 0) && paused === false) {
                                 unitX[drawunit]+=unitspeed*(destinationX[drawunit] - unitX[drawunit])/(abs(destinationX[drawunit] - unitX[drawunit]) + abs(destinationY[drawunit] - unitY[drawunit]));
                                 unitY[drawunit]+=unitspeed*(destinationY[drawunit] - unitY[drawunit])/(abs(destinationX[drawunit] - unitX[drawunit]) + abs(destinationY[drawunit] - unitY[drawunit]));
                             }
@@ -509,7 +539,7 @@
                             
                             //dying system!
                             for (var collision = 0; collision < unitX.length; collision++) {
-                                if (unitX[drawunit] + unitsize[0]/4 > unitX[collision] && unitY[drawunit] + unitsize[1]/4 > unitY[collision] && unitX[drawunit] - unitsize[0]/4 < unitX[collision] && unitY[drawunit] - unitsize[1]/4 < unitY[collision] && unittype[drawunit]%2 != unittype[collision]%2) {
+                                if (unitX[drawunit] + unitsize[0]/4 > unitX[collision] && unitY[drawunit] + unitsize[1]/4 > unitY[collision] && unitX[drawunit] - unitsize[0]/4 < unitX[collision] && unitY[drawunit] - unitsize[1]/4 < unitY[collision] && unittype[drawunit]%2 != unittype[collision]%2 && paused === false) {
                                     if (attacked[drawunit] != true) {
                                         unithealth[collision]--;
                                         attacked[drawunit] = true;
@@ -642,6 +672,17 @@
                             }
                         }
                     
+                        //pause menu
+                        if (paused === true) {
+                            fill(0, 0, 0, 100);
+                            rect(0, 0, sw, sh);
+
+                            fill(255);
+                            text("Press 'P' again to resume!\nPress 'M' to go back to the main menu!", sw/2, sh/1.5);
+                            textSize((sw+sh)/10);
+                            text("PAUSED", sw/2, sh/4);
+                        }
+
                     } else if (page === "debug") {
                         if (aseed < 8) {
                             background(0);
