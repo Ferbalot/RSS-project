@@ -22,22 +22,25 @@
                     size(sw, sh); 
 
                     if ("image") {
-                        var snailstudiosimage = loadImage("assets/images/snail studios logo.png");
-                        var backgroundimage = loadImage("assets/images/background placeholder.png");
-                        var titlescreen = loadImage("assets/images/title_screen.png");
-                        var playbutton = loadImage("assets/images/play button.png");
-                        var optionsbutton = loadImage("assets/images/settings button.png");
-                        var castle = loadImage("assets/images/castle.png");
-                        var sunnyhut = loadImage("assets/images/sunnyhut.png");
-                        var settings1 = loadImage("assets/images/settings screen.png");
-                        var settings2 = loadImage("assets/images/settings screen2.png");
-                        var taco = loadImage("assets/images/Taco_Guy.png");
-                        var rainbow = loadImage("assets/images/rainbow.png");
-                        var sscpeek = loadImage("assets/images/tacothoughts.png");
-                        var mainhud = loadImage("assets/images/mainhud.png");
+                        var snailstudiosimage = loadImage("https://ferbalot.github.io/RSS-project/assets/images/snail studios logo.PNG");
+                        var backgroundimage = loadImage("https://ferbalot.github.io/RSS-project/assets/images/background placeholder.png");
+                        var titlescreen = loadImage("https://ferbalot.github.io/RSS-project/assets/images/title_screen.png");
+                        var playbutton = loadImage("https://ferbalot.github.io/RSS-project/assets/images/play button.png");
+                        var optionsbutton = loadImage("https://ferbalot.github.io/RSS-project/assets/images/settings button.png");
+                        var castle = loadImage("https://ferbalot.github.io/RSS-project/assets/images/castle.png");
+                        var sunnyhut = loadImage("https://ferbalot.github.io/RSS-project/assets/images/sunnyhut.png");
+                        var settings1 = loadImage("https://ferbalot.github.io/RSS-project/assets/images/settings screen.png");
+                        var settings2 = loadImage("https://ferbalot.github.io/RSS-project/assets/images/settings screen2.png");
+                        var taco = loadImage("https://ferbalot.github.io/RSS-project/assets/images/Taco_Guy.png");
+                        var rainbow = loadImage("https://ferbalot.github.io/RSS-project/assets/images/rainbow.png");
+                        var sscpeek = loadImage("https://ferbalot.github.io/RSS-project/assets/images/tacothoughts.png");
+                        var mainhud = loadImage("https://ferbalot.github.io/RSS-project/assets/images/mainhud.png");
 
-                        var icon = [loadImage("assets/images/normalicon.png"), loadImage("assets/images/enemyicon.png"), loadImage("assets/images/spbg.png"), loadImage("assets/images/eks.png"), loadImage("assets/images/royalknighticon.png"), loadImage("assets/images/badroyalknighticon.png")];
-                        var unit = [loadImage("assets/images/soldier.png"), loadImage("assets/images/enemyknight.png"), loadImage("assets/images/spnk.png"), loadImage("assets/images/spek.png"), loadImage("assets/images/royalknight.png"), loadImage("assets/images/badroyalknight.png")];
+                        var icon = [loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalicon.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/enemyicon.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/spbg.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/eks.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/royalknighticon.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/badroyalknighticon.png")];
+                        var unit = [loadImage("https://ferbalot.github.io/RSS-project/assets/images/soldier.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/enemyknight.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/spnk.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/spek.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/royalknight.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/badroyalknight.png")];
+                    
+                        //v a0.7
+                        var bodyparts = [loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalesquireleftarm.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalesquirehead.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalesquirebody.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalesquirerightarm.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalleftleg.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalrightleg.png")];
                     }
                     
                     if ("normal variables") {
@@ -136,6 +139,22 @@
                     //v a0.6
                     var paused = false;
                     var unitname = ["Esquire", "Knight", "Royal Esquire"];
+                
+                    //v a0.7
+                    var ar = [-1]; //rotation position
+                    var ad = [false]; //direction
+                    var as = [0.1]; //animation speed
+                    var zoom = 2; //self explanatory
+
+                    var unitanimation = ["idle"];
+
+                    var t1a = [-15, 0, -3, -10, 0, 0]; t2a = [-38, -63, 0, -42, 68, 70]; ra = [0, 0, 0, 0, 0, 0]; ixa = [-114/2, -52/2, -52/2, -48/2, -30/2, -38/2]; iya = [-40/2, -90/2, -134/2, -28/2, -10/2, -20/2]; iwa = [131, 57, 52, 41, 62, 61]; iha = [165, 62, 134, 115, 107, 116];
+                
+                    var bodypart = function(t1, t2, r, l, ix, iy, iw, ih) {
+                        translate(t1, t2);
+                        rotate(r);
+                        image(l, ix, iy, iw, ih);
+                    }
                 }
 
                 keyPressed = function() {
@@ -148,6 +167,11 @@
                                 unitY[unitY.length] = mouseY + y;
                                 unittype[unittype.length] = Number(kp) - 1;
                                 unithealth[unithealth.length] = unitmaxhealth[round((Number(kp)-2)/2)];
+                                ar[ar.length] = -1;
+                                ad[ad.length] = false;
+                                as[as.length] = 0.1;
+                                zoom[zoom.length] = 1;
+                                unitanimation[unitanimation.length] = "idle";
                             }
                             
                             if (kp === "w" || keyCode + 0 === 38) {
@@ -509,10 +533,26 @@
                             if ((destinationX[drawunit] > 0 || destinationX[drawunit] < 0) && paused === false) {
                                 unitX[drawunit]+=unitspeed*(destinationX[drawunit] - unitX[drawunit])/(abs(destinationX[drawunit] - unitX[drawunit]) + abs(destinationY[drawunit] - unitY[drawunit]));
                                 unitY[drawunit]+=unitspeed*(destinationY[drawunit] - unitY[drawunit])/(abs(destinationX[drawunit] - unitX[drawunit]) + abs(destinationY[drawunit] - unitY[drawunit]));
+                                unitanimation[drawunit] = "walk";
                             }
                             if (abs(unitX[drawunit] - destinationX[drawunit]) < unitspeed && abs(unitY[drawunit] - destinationY[drawunit]) < unitspeed) {
                                 destinationX[drawunit] = "";
                                 destinationY[drawunit] = "";
+                                unitanimation[drawunit] = "idle";
+                            }
+
+                            //animation logic
+                            if (ar[drawunit] > 1) {
+                                ad[drawunit] = false;
+                            }
+                            if (ar[drawunit] < -1) {
+                                ad[drawunit] = true;
+                            }
+                            if (ad[drawunit] === true) {
+                                ar[drawunit]+=as[drawunit];
+                            }
+                            if (ad[drawunit] === false) {
+                                ar[drawunit]-=as[drawunit];
                             }
 
                             //unit draw
@@ -526,7 +566,42 @@
                             noStroke();
                             rect(unitX[drawunit] - x - unitsize[0]/8, unitY[drawunit] - y - unitsize[1]/4, unitsize[0]/4, unitsize[1]/2);
 
-                            image(unit[unittype[drawunit]], unitX[drawunit] - x - unitsize[0]/4, unitY[drawunit] - y - unitsize[1]/4, unitsize[0]/2, unitsize[1]/2);
+                            //actual unit drawing!
+                            if (unittype[drawunit] > 0) {
+                                image(unit[unittype[drawunit]], unitX[drawunit] - x - unitsize[0]/4, unitY[drawunit] - y - unitsize[1]/4, unitsize[0]/2, unitsize[1]/2);
+                            } else {
+                                pushMatrix();
+                                translate(unitX[drawunit] - x, unitY[drawunit] - y); // Coordinates
+
+                                //animation!
+                                if (unitanimation[drawunit] === "walk") {
+                                    as[drawunit] = 0.1;
+                                    //rotate(ar[drawunit]/50);
+                                    ra[0] = ar[drawunit]/30;
+                                    ra[1] = ar[drawunit]/30;
+                                    ra[2] = ar[drawunit]/100;
+                                    ra[3] = -ar[drawunit]/10;
+                                    ra[4] = -ar[drawunit];
+                                    ra[5] = ar[drawunit];
+                                }
+                                if (unitanimation[drawunit] === "idle") {
+                                    as[drawunit] = 0.03;
+                                    rotate(ar[drawunit]/100);
+                                    ra[0] = ar[drawunit]/50;
+                                    ra[1] = ar[drawunit]/50;
+                                    ra[2] = 0;
+                                    ra[3] = -ar[drawunit]/50;
+                                    ra[4] = -ar[drawunit]/50;
+                                    ra[5] = -ar[drawunit]/50;
+                                }
+                                
+                                for (var bpd = 0; bpd < 6; bpd++) {
+                                    pushMatrix();
+                                    bodypart(t1a[bpd]/zoom, t2a[bpd]/zoom, ra[bpd], bodyparts[bpd], ixa[bpd]/zoom, iya[bpd]/zoom, iwa[bpd]/zoom, iha[bpd]/zoom);
+                                    popMatrix();
+                                }
+                                popMatrix();
+                            }
 
                             //destination flag
                             if (destinationX[drawunit] > 0 || destinationX[drawunit] < 0) {
@@ -720,11 +795,11 @@
     </script>
 
     <script>
-        var audio3 = new Audio("assets/sounds/Retro-Night.mp3");
-        var audio2 = new Audio("assets/sounds/Dark-winters-night.mp3");
-        var audio = new Audio("assets/sounds/Tokyo-bells.mp3");
+        var audio3 = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/Retro-Night.mp3");
+        var audio2 = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/Dark-winters-night.mp3");
+        var audio = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/Tokyo-bells.mp3");
 
-        var sfx1 = new Audio("assets/sounds/sfx1.mp3");
-        var sfx2 = new Audio("assets/sounds/sfx2.mp3");
+        var sfx1 = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/sfx1.mp3");
+        var sfx2 = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/sfx2.mp3");
     </script>
 </html>
