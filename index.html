@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html> 
     <head>
-        <title>Version: A0.5.4</title> 
+        <title>Version: A0.7</title> 
         <style>
             body {
                 margin: 0;
@@ -22,22 +22,25 @@
                     size(sw, sh); 
 
                     if ("image") {
-                        var snailstudiosimage = loadImage("https://ferbalot.github.io/RSS-project/snail studios logo.PNG");
-                        var backgroundimage = loadImage("https://ferbalot.github.io/RSS-project/background placeholder.png");
-                        var titlescreen = loadImage("https://ferbalot.github.io/RSS-project/title_screen.png");
-                        var playbutton = loadImage("https://ferbalot.github.io/RSS-project/play button.png");
-                        var optionsbutton = loadImage("https://ferbalot.github.io/RSS-project/settings button.png");
-                        var castle = loadImage("https://ferbalot.github.io/RSS-project/castle.png");
-                        var sunnyhut = loadImage("https://ferbalot.github.io/RSS-project/sunnyhut.png");
-                        var settings1 = loadImage("https://ferbalot.github.io/RSS-project/settings screen.png");
-                        var settings2 = loadImage("https://ferbalot.github.io/RSS-project/settings screen2.png");
-                        var taco = loadImage("https://ferbalot.github.io/RSS-project/Taco_Guy.png");
-                        var rainbow = loadImage("https://ferbalot.github.io/RSS-project/rainbow.png");
-                        var sscpeek = loadImage("https://ferbalot.github.io/RSS-project/tacothoughts.png");
-                        var mainhud = loadImage("https://ferbalot.github.io/RSS-project/mainhud.png");
+                        var snailstudiosimage = loadImage("https://ferbalot.github.io/RSS-project/assets/images/snail studios logo.PNG");
+                        var backgroundimage = loadImage("https://ferbalot.github.io/RSS-project/assets/images/background placeholder.png");
+                        var titlescreen = loadImage("https://ferbalot.github.io/RSS-project/assets/images/title_screen.png");
+                        var playbutton = loadImage("https://ferbalot.github.io/RSS-project/assets/images/play button.png");
+                        var optionsbutton = loadImage("https://ferbalot.github.io/RSS-project/assets/images/settings button.png");
+                        var castle = loadImage("https://ferbalot.github.io/RSS-project/assets/images/castle.png");
+                        var sunnyhut = loadImage("https://ferbalot.github.io/RSS-project/assets/images/sunnyhut.png");
+                        var settings1 = loadImage("https://ferbalot.github.io/RSS-project/assets/images/settings screen.png");
+                        var settings2 = loadImage("https://ferbalot.github.io/RSS-project/assets/images/settings screen2.png");
+                        var taco = loadImage("https://ferbalot.github.io/RSS-project/assets/images/Taco_Guy.png");
+                        var rainbow = loadImage("https://ferbalot.github.io/RSS-project/assets/images/rainbow.png");
+                        var sscpeek = loadImage("https://ferbalot.github.io/RSS-project/assets/images/tacothoughts.png");
+                        var mainhud = loadImage("https://ferbalot.github.io/RSS-project/assets/images/mainhud.png");
 
-                        var icon = [loadImage("https://ferbalot.github.io/RSS-project/normalicon.png"), loadImage("https://ferbalot.github.io/RSS-project/enemyicon.png"), loadImage("https://ferbalot.github.io/RSS-project/spbg.png"), loadImage("https://ferbalot.github.io/RSS-project/eks.png"), loadImage("https://ferbalot.github.io/RSS-project/royalknighticon.png"), loadImage("https://ferbalot.github.io/RSS-project/badroyalknighticon.png")];
-                        var unit = [loadImage("https://ferbalot.github.io/RSS-project/soldier.png"), loadImage("https://ferbalot.github.io/RSS-project/enemyknight.png"), loadImage("https://ferbalot.github.io/RSS-project/spnk.png"), loadImage("https://ferbalot.github.io/RSS-project/spek.png"), loadImage("https://ferbalot.github.io/RSS-project/royalknight.png"), loadImage("https://ferbalot.github.io/RSS-project/badroyalknight.png")];
+                        var icon = [loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalicon.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/enemyicon.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/spbg.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/eks.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/royalknighticon.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/badroyalknighticon.png")];
+                        var unit = [loadImage("https://ferbalot.github.io/RSS-project/assets/images/soldier.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/enemyknight.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/spnk.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/spek.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/royalknight.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/badroyalknight.png")];
+                    
+                        //v a0.7
+                        var bodyparts = [loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalesquireleftarm.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalesquirehead.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalesquirebody.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalesquirerightarm.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalleftleg.png"), loadImage("https://ferbalot.github.io/RSS-project/assets/images/normalrightleg.png")];
                     }
                     
                     if ("normal variables") {
@@ -105,6 +108,16 @@
                         }
                         
                         text(unithealth[ID] + "/" + unitmaxhealth[round((unittype[ID]-1)/2)], x + sw/200 + (w - sw/100)/2, y + sh/100 + h/20);
+
+                        if (h > 100) {
+                            textSize((sw+sh)/250);
+                        } 
+                        if (h < 100 && h > 10) {
+                            textSize((sw+sh)/300);
+                        }
+
+                        fill(150, 150, 0);
+                        text(unitname[round((unittype[ID]-1)/2)], x + sw/200 + (w - sw/100)/2, y + sh/100 + h/5);
                     }
                     var IDredirect = [];
                     var unithealth = [10];
@@ -122,51 +135,92 @@
 
                     //v a0.5.3
                     var unitmaxhealth = [10, 50, 20];
+
+                    //v a0.6
+                    var paused = false;
+                    var unitname = ["Esquire", "Knight", "Royal Esquire"];
+                
+                    //v a0.7
+                    var ar = [-1]; //rotation position
+                    var ad = [false]; //direction
+                    var as = [0.1]; //animation speed
+                    var zoom = 2; //self explanatory
+
+                    var unitanimation = ["idle"];
+
+                    var t1a = [-15, 0, -3, -10, 0, 0]; t2a = [-38, -63, 0, -42, 68, 70]; ra = [0, 0, 0, 0, 0, 0]; ixa = [-114/2, -52/2, -52/2, -48/2, -30/2, -38/2]; iya = [-40/2, -90/2, -134/2, -28/2, -10/2, -20/2]; iwa = [131, 57, 52, 41, 62, 61]; iha = [165, 62, 134, 115, 107, 116];
+                
+                    var bodypart = function(t1, t2, r, l, ix, iy, iw, ih) {
+                        translate(t1, t2);
+                        rotate(r);
+                        image(l, ix, iy, iw, ih);
+                    }
                 }
 
                 keyPressed = function() {
                     if (page === "game") {
                         kp = key.toString();
-                        code+=kp;
-                        if (Number(kp) > 0 && Number(kp) < 7) {
-                            unitX[unitX.length] = mouseX + x;
-                            unitY[unitY.length] = mouseY + y;
-                            unittype[unittype.length] = Number(kp) - 1;
-                            unithealth[unithealth.length] = unitmaxhealth[round((Number(kp)-2)/2)];
-                        }
-                        
-                        if (kp === "w" || keyCode + 0 === 38) {
-                            movement[0] = true;
-                            if (movement[2] === true) {
-                                movement[0] = false;
-                                movement[2] = false;
+                        if (paused === false) {
+                            code+=kp;
+                            if (Number(kp) > 0 && Number(kp) < 7) {
+                                unitX[unitX.length] = mouseX + x;
+                                unitY[unitY.length] = mouseY + y;
+                                unittype[unittype.length] = Number(kp) - 1;
+                                unithealth[unithealth.length] = unitmaxhealth[round((Number(kp)-2)/2)];
+                                ar[ar.length] = -1;
+                                ad[ad.length] = false;
+                                as[as.length] = 0.1;
+                                zoom[zoom.length] = 1;
+                                unitanimation[unitanimation.length] = "idle";
+                            }
+                            
+                            if (kp === "w" || keyCode + 0 === 38) {
+                                movement[0] = true;
+                                if (movement[2] === true) {
+                                    movement[0] = false;
+                                    movement[2] = false;
+                                }
+                            }
+                            if (kp === "a" || keyCode + 0 === 37) {
+                                movement[1] = true;
+                                if (movement[3] === true) {
+                                    movement[1] = false;
+                                    movement[3] = false;
+                                }
+                            }
+                            if (kp === "s" || keyCode + 0 === 40) {
+                                movement[2] = true;
+                                if (movement[0] === true) {
+                                    movement[0] = false;
+                                    movement[2] = false;
+                                }
+                            }
+                            if (kp === "d" || keyCode + 0 === 39) {
+                                movement[3] = true;
+                                if (movement[1] === true) {
+                                    movement[3] = false;
+                                    movement[1] = false;
+                                }
                             }
                         }
-                        if (kp === "a" || keyCode + 0 === 37) {
-                            movement[1] = true;
-                            if (movement[3] === true) {
-                                movement[1] = false;
-                                movement[3] = false;
+                        //escape
+                        if (kp === "p") {
+                            if (paused === true) {
+                                paused = false;
+                            } else {
+                                paused = true;
                             }
                         }
-                        if (kp === "s" || keyCode + 0 === 40) {
-                            movement[2] = true;
-                            if (movement[0] === true) {
-                                movement[0] = false;
-                                movement[2] = false;
-                            }
-                        }
-                        if (kp === "d" || keyCode + 0 === 39) {
-                            movement[3] = true;
-                            if (movement[1] === true) {
-                                movement[3] = false;
-                                movement[1] = false;
+                        if (paused === true) {
+                            if (key.toString() === "m") {
+                                page = "menu";
+                                paused = false;
                             }
                         }
                     }
                 }
                 keyReleased = function() {
-                    if (page === "game") {
+                    if (page === "game" && paused === false) {
                         if (movement[0] === true&&movement[1] === false&&movement[2] === false&&movement[3] === false) {
                             movement[0] = false;
                         }
@@ -220,10 +274,13 @@
                         if (mouseX > innerWidth/2 - innerWidth/4 - innerWidth/20 && mouseY > innerHeight/2 - innerHeight/20 && mouseX < innerWidth/2 - innerWidth/4 + innerWidth/20 && mouseY < innerHeight/2 + innerHeight/20) {
                             page = "menu";
                             audiotoggle = true;
+                            audio.play();
                         }
                         if (mouseX > innerWidth/2 + innerWidth/4 - innerWidth/20 && mouseY > innerHeight/2 - innerHeight/20 && mouseX < innerWidth/2 + innerWidth/4 + innerWidth/20 && mouseY < innerHeight/2 + innerHeight/20) {
                             page = "menu";
                             audiotoggle = false;
+                            audio.pause();
+                            audio2.pause();
                         }
                     }
                     if (page === "menu") {
@@ -247,7 +304,7 @@
                     if (page === "intro" && menuintro > 1) {
                         page = "menu";
                     }
-                    if (page === "game") {
+                    if (page === "game" && paused === false) {
                         if (mouseButton === LEFT) {
                             mousedrag = true;
                             mousedragcoord[0] = mouseX + x; //left side
@@ -292,7 +349,7 @@
                 }
                 mouseReleased = function() {
                     mpd = false;
-                    if (mousedrag === true) {
+                    if (mousedrag === true && paused === false) {
                         mousedrag = false;
 
                         mousedragcoord[2] = mouseX + x; //right side
@@ -465,7 +522,7 @@
                         if (introtexttime > 0) {
                             introtexttime--;
                             fill(0, 0, 0, introtexttime);
-                            text("Last Major: Try pressing 3 and 4 to get the NEW knights! Optimizations done as well.\nLast Minor: Changed menu layout!", innerWidth/2, innerHeight/4);
+                            text("Last Major: Implemented the normal Esquire's animation!", innerWidth/2, innerHeight/4);
                             textSize((sw+sh)/25);
                             text(version + ":\n\n", innerWidth/2, innerHeight/4);
                         }
@@ -473,13 +530,29 @@
                         //drawing the units!
                         for (var drawunit = 0; drawunit < unitX.length; drawunit++) {
                             //movement
-                            if (destinationX[drawunit] > 0 || destinationX[drawunit] < 0) {
+                            if ((destinationX[drawunit] > 0 || destinationX[drawunit] < 0) && paused === false) {
                                 unitX[drawunit]+=unitspeed*(destinationX[drawunit] - unitX[drawunit])/(abs(destinationX[drawunit] - unitX[drawunit]) + abs(destinationY[drawunit] - unitY[drawunit]));
                                 unitY[drawunit]+=unitspeed*(destinationY[drawunit] - unitY[drawunit])/(abs(destinationX[drawunit] - unitX[drawunit]) + abs(destinationY[drawunit] - unitY[drawunit]));
+                                unitanimation[drawunit] = "walk";
                             }
                             if (abs(unitX[drawunit] - destinationX[drawunit]) < unitspeed && abs(unitY[drawunit] - destinationY[drawunit]) < unitspeed) {
                                 destinationX[drawunit] = "";
                                 destinationY[drawunit] = "";
+                                unitanimation[drawunit] = "idle";
+                            }
+
+                            //animation logic
+                            if (ar[drawunit] > 1) {
+                                ad[drawunit] = false;
+                            }
+                            if (ar[drawunit] < -1) {
+                                ad[drawunit] = true;
+                            }
+                            if (ad[drawunit] === true) {
+                                ar[drawunit]+=as[drawunit];
+                            }
+                            if (ad[drawunit] === false) {
+                                ar[drawunit]-=as[drawunit];
                             }
 
                             //unit draw
@@ -493,7 +566,42 @@
                             noStroke();
                             rect(unitX[drawunit] - x - unitsize[0]/8, unitY[drawunit] - y - unitsize[1]/4, unitsize[0]/4, unitsize[1]/2);
 
-                            image(unit[unittype[drawunit]], unitX[drawunit] - x - unitsize[0]/4, unitY[drawunit] - y - unitsize[1]/4, unitsize[0]/2, unitsize[1]/2);
+                            //actual unit drawing!
+                            if (unittype[drawunit] > 0) {
+                                image(unit[unittype[drawunit]], unitX[drawunit] - x - unitsize[0]/4, unitY[drawunit] - y - unitsize[1]/4, unitsize[0]/2, unitsize[1]/2);
+                            } else {
+                                pushMatrix();
+                                translate(unitX[drawunit] - x, unitY[drawunit] - y); // Coordinates
+
+                                //animation!
+                                if (unitanimation[drawunit] === "walk") {
+                                    as[drawunit] = 0.1;
+                                    //rotate(ar[drawunit]/50);
+                                    ra[0] = ar[drawunit]/30;
+                                    ra[1] = ar[drawunit]/30;
+                                    ra[2] = ar[drawunit]/100;
+                                    ra[3] = -ar[drawunit]/10;
+                                    ra[4] = -ar[drawunit];
+                                    ra[5] = ar[drawunit];
+                                }
+                                if (unitanimation[drawunit] === "idle") {
+                                    as[drawunit] = 0.03;
+                                    rotate(ar[drawunit]/100);
+                                    ra[0] = ar[drawunit]/50;
+                                    ra[1] = ar[drawunit]/50;
+                                    ra[2] = 0;
+                                    ra[3] = -ar[drawunit]/50;
+                                    ra[4] = -ar[drawunit]/50;
+                                    ra[5] = -ar[drawunit]/50;
+                                }
+                                
+                                for (var bpd = 0; bpd < 6; bpd++) {
+                                    pushMatrix();
+                                    bodypart(t1a[bpd]/zoom, t2a[bpd]/zoom, ra[bpd], bodyparts[bpd], ixa[bpd]/zoom, iya[bpd]/zoom, iwa[bpd]/zoom, iha[bpd]/zoom);
+                                    popMatrix();
+                                }
+                                popMatrix();
+                            }
 
                             //destination flag
                             if (destinationX[drawunit] > 0 || destinationX[drawunit] < 0) {
@@ -509,7 +617,7 @@
                             
                             //dying system!
                             for (var collision = 0; collision < unitX.length; collision++) {
-                                if (unitX[drawunit] + unitsize[0]/4 > unitX[collision] && unitY[drawunit] + unitsize[1]/4 > unitY[collision] && unitX[drawunit] - unitsize[0]/4 < unitX[collision] && unitY[drawunit] - unitsize[1]/4 < unitY[collision] && unittype[drawunit]%2 != unittype[collision]%2) {
+                                if (unitX[drawunit] + unitsize[0]/4 > unitX[collision] && unitY[drawunit] + unitsize[1]/4 > unitY[collision] && unitX[drawunit] - unitsize[0]/4 < unitX[collision] && unitY[drawunit] - unitsize[1]/4 < unitY[collision] && unittype[drawunit]%2 != unittype[collision]%2 && paused === false) {
                                     if (attacked[drawunit] != true) {
                                         unithealth[collision]--;
                                         attacked[drawunit] = true;
@@ -642,6 +750,17 @@
                             }
                         }
                     
+                        //pause menu
+                        if (paused === true) {
+                            fill(0, 0, 0, 100);
+                            rect(0, 0, sw, sh);
+
+                            fill(255);
+                            text("Press 'P' again to resume!\nPress 'M' to go back to the main menu!", sw/2, sh/1.5);
+                            textSize((sw+sh)/10);
+                            text("PAUSED", sw/2, sh/4);
+                        }
+
                     } else if (page === "debug") {
                         if (aseed < 8) {
                             background(0);
@@ -676,11 +795,11 @@
     </script>
 
     <script>
-        var audio3 = new Audio("https://ferbalot.github.io/RSS-project/Retro-Night.mp3");
-        var audio2 = new Audio("https://ferbalot.github.io/RSS-project/Dark-winters-night.mp3");
-        var audio = new Audio("https://ferbalot.github.io/RSS-project/Tokyo-bells.mp3");
+        var audio3 = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/Retro-Night.mp3");
+        var audio2 = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/Dark-winters-night.mp3");
+        var audio = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/Tokyo-bells.mp3");
 
-        var sfx1 = new Audio("https://ferbalot.github.io/RSS-project/sfx1.mp3");
-        var sfx2 = new Audio("https://ferbalot.github.io/RSS-project/sfx2.mp3");
+        var sfx1 = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/sfx1.mp3");
+        var sfx2 = new Audio("https://ferbalot.github.io/RSS-project/assets/sfx/sfx2.mp3");
     </script>
 </html>
