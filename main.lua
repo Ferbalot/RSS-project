@@ -38,6 +38,9 @@ function love.load()
 
 	sfx1 = love.audio.newSource("assets/sfx/sfx1.mp3", "static")
 	sfx2 = love.audio.newSource("assets/sfx/sfx2.mp3", "static")
+
+	font = love.graphics.newFont(36)
+	font2 = love.graphics.newFont(50)
 end
 
 -- Variables
@@ -55,7 +58,7 @@ x = 0 y = 0
 movement = {false, false, false, false}
 
 --v 0.2.3
-page = "menu"
+page = "intro"
 menuintro = 0
 menuoutro = 200
 
@@ -87,7 +90,7 @@ function createButton(id, image, x, y, scale, func)
 		buttons[tostring(id)] = {sfx1 = false, sfx2 = false}
 	end
 
-	print(y) -- Why are both values printed and used?
+	-- print(y) -- Why are both values printed and used?
 	if mouseX > (x - (image:getWidth()*scale)/2) and mouseY > (y - (image:getHeight()*scale)/2)
 	and mouseX < (x + (image:getWidth()*scale)/2) and mouseY < (y + (image:getHeight()*scale)/2) then
 		lg.draw(image, x, y, -0.1, scale+0.05, scale+0.05, image:getWidth()/2, image:getHeight()/2)
@@ -114,6 +117,42 @@ end
 function love.draw()
 	mouseX = love.mouse.getX()
 	mouseY = love.mouse.getY()
+
+	if page == "options" then
+        --darkness!
+        lg.setBackgroundColor(0, 0, 0)
+		love.graphics.setFont(font)
+
+        --glowy effect
+        for glowy = 1, 25 do
+			lg.setColor(255, 255, 255, 1)
+			lg.ellipse("fill", mouseX, mouseY, glowy*20, glowy*20)
+        end
+
+        --buttons!
+        if mouseX > width/2 - width/4 - width/20 and mouseY > height/2 - height/20 and mouseX < width/2 - width/4 + width/20 and mouseY < height/2 + height/20 then
+			lg.setColor(100, 100, 100)
+        else
+			lg.setColor(50, 50, 50)
+        end
+        lg.rectangle("fill", width/2 - width/4 - width/20, height/2 - height/20, width/10, height/10)
+
+        if mouseX > width/2 + width/4 - width/20 and mouseY > height/2 - height/20 and mouseX < width/2 + width/4 + width/20 and mouseY < height/2 + height/20 then
+            lg.setColor(100, 100, 100)
+        else
+            lg.setColor(50, 50, 50)
+        end
+        lg.rectangle("fill", width/2 + width/4 - width/20, height/2 - height/20, width/10, height/10)
+
+        lg.setColor(255, 255, 255)
+		love.graphics.printf("Yes", -width/2 + width/4, (height/2 - 22)+0.5, width, "center")
+		love.graphics.printf("No", width/2 - width/4, height/2 - 22+0.5, width, "center")
+
+        love.graphics.setFont(font2)
+		love.graphics.printf("Do you want audio?", 0, height/4 - 22, width, "center")
+
+        love.graphics.setFont(font)
+    end
 
 	if page == "intro" then
         if audiotoggle == true then
