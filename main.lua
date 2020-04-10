@@ -55,7 +55,7 @@ x = 0 y = 0
 movement = {false, false, false, false}
 
 --v 0.2.3
-page = "intro"
+page = "menu"
 menuintro = 0
 menuoutro = 200
 
@@ -80,20 +80,34 @@ ac = 1013904223
 am = math.pow(2, 32)
 aseed = 1
 
+buttons = {}
+
 function createButton(id, image, x, y, scale, func)
-	if mouseX > x - image:getWidth()/2*scale and mouseY > y - image:getHeight()/2*scale and mouseX < x + image:getWidth()/2*scale and mouseY < y + image:getHeight()/2*scale then
+	if buttons[tostring(id)] == nil then
+		buttons[tostring(id)] = {sfx1 = false, sfx2 = false}
+	end
+
+	print(y) -- Why are both values printed and used?
+	if mouseX > (x - (image:getWidth()*scale)/2) and mouseY > (y - (image:getHeight()*scale)/2)
+	and mouseX < (x + (image:getWidth()*scale)/2) and mouseY < (y + (image:getHeight()*scale)/2) then
 		lg.draw(image, x, y, -0.1, scale+0.05, scale+0.05, image:getWidth()/2, image:getHeight()/2)
-		if sfxplayed[id] == false and audiotoggle == true then
+		if buttons[tostring(id)].sfx1 == false and audiotoggle == true then
             sfx1:play()
-			sfxplayed[id] = true
+			buttons[tostring(id)].sfx1 = true
         end
 
 		if lm.isDown(1) then
+			if buttons[tostring(id)].sfx2 == false and audiotoggle == true then
+		        sfx2:play()
+				buttons[tostring(id)].sfx2 = true
+		    end
 			func()
+		else
+			buttons[tostring(id)].sfx2 = false
 		end
 	else
 		lg.draw(image, x, y, 0, scale, scale, image:getWidth()/2, image:getHeight()/2)
-		sfxplayed[id] = false
+		buttons[tostring(id)].sfx1 = false
 	end
 end
 
