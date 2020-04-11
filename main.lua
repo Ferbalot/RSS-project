@@ -125,26 +125,26 @@ function love.draw()
 
         --glowy effect
         for glowy = 1, 25 do
-			lg.setColor(255, 255, 255, 1)
+			lg.setColor(1, 1, 1, 1/255)
 			lg.ellipse("fill", mouseX, mouseY, glowy*20, glowy*20)
         end
 
         --buttons!
         if mouseX > width/2 - width/4 - width/20 and mouseY > height/2 - height/20 and mouseX < width/2 - width/4 + width/20 and mouseY < height/2 + height/20 then
-			lg.setColor(100, 100, 100)
+			lg.setColor(100/255, 100/255, 100/255)
         else
-			lg.setColor(50, 50, 50)
+			lg.setColor(50/255, 50/255, 50/255)
         end
         lg.rectangle("fill", width/2 - width/4 - width/20, height/2 - height/20, width/10, height/10)
 
         if mouseX > width/2 + width/4 - width/20 and mouseY > height/2 - height/20 and mouseX < width/2 + width/4 + width/20 and mouseY < height/2 + height/20 then
-            lg.setColor(100, 100, 100)
+            lg.setColor(100/255, 100/255, 100/255)
         else
-            lg.setColor(50, 50, 50)
+            lg.setColor(50/255, 50/255, 50/255)
         end
         lg.rectangle("fill", width/2 + width/4 - width/20, height/2 - height/20, width/10, height/10)
 
-        lg.setColor(255, 255, 255)
+        lg.setColor(1, 1, 1)
 		love.graphics.printf("Yes", -width/2 + width/4, (height/2 - 22)+0.5, width, "center")
 		love.graphics.printf("No", width/2 - width/4, height/2 - 22+0.5, width, "center")
 
@@ -169,11 +169,11 @@ function love.draw()
             page = "menu"
         end
 
-		lg.setColor(255, 255, 255, 255)
+		lg.setColor(1, 1, 1)
         lg.draw(logo, width/2, height/2, 0, 0.5+menuintro/logo:getWidth()/2, 0.5+menuintro/logo:getHeight()/2, logo:getWidth()/2, logo:getHeight()/2);
-		lg.setColor(0, 0, 0, -300 + menuintro/(logo:getHeight()/1.5)*355)
+		lg.setColor(0, 0, 0, (-300 + menuintro/(logo:getHeight()/1.5)*355)/255)
         lg.rectangle("fill", 0, 0, width, height)
-		lg.setColor(255, 255, 255, 255)
+		lg.setColor(1, 1, 1)
     end
 
 	if page == "menu" then
